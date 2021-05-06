@@ -19,25 +19,19 @@ public class Challenge {
             Long newValue;
 
             //Calculating debts
-            currentValue = balance.get(borrower).equals(null) ? 0 : balance.get(borrower);
+            currentValue = balance.get(borrower) == null ? 0L : balance.get(borrower);
             newValue = currentValue - value;
             balance.put(borrower, newValue);
 
             //Calculating credits
-            currentValue = balance.get(lender).equals(null) ? 0 : balance.get(lender);
+            currentValue = balance.get(lender) == null ? 0L : balance.get(lender);
             newValue = currentValue + value;
             balance.put(lender, newValue);
         });
 
-        //remove positive balances
-        for (Map.Entry<String, Long> entry : balance.entrySet()) {
-            String key = entry.getKey();
-            Long value = entry.getValue();
+        balance.entrySet().removeIf(e -> e.getValue() >= 0);
 
-            if (value >= 0) {
-                balance.remove(key);
-            }
-        }
+        System.out.println("negative balance: " + balance);
 
         if (balance.size() == 0) {
             return Arrays.asList("Nobody has a negative balance");
@@ -48,12 +42,12 @@ public class Challenge {
         for (Map.Entry<String, Long> entry : balance.entrySet()) {
             String key = entry.getKey();
             Long value = entry.getValue();
-
-
             if (value < lowestValue) {
                 lowestValue = value;
             }
         }
+
+
 
         //get the lowest value
         List<String> negativeBalance = new ArrayList<>();
@@ -67,6 +61,11 @@ public class Challenge {
             }
         }
 
-        return negativeBalance.stream().sorted().collect(Collectors.toList());
+        System.out.println("before sorting: " + negativeBalance);
+        negativeBalance = negativeBalance.stream().sorted().collect(Collectors.toList());
+
+        System.out.println("after sorting: " + negativeBalance);
+
+        return negativeBalance;
     }
 }
