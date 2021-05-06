@@ -15,23 +15,18 @@ public class Challenge {
 
             boolean borrowerExists = balance.containsKey(borrower);
             boolean lenderExists = balance.containsKey(lender);
+            Long currentValue;
+            Long newValue;
 
             //Calculating debts
-            if (borrowerExists) {
-                Long newValue = balance.get(borrower) - value;
-                balance.put(borrower, newValue);
-            } else {
-                Long newValue = 0 - value;
-                balance.put(borrower, newValue);
-            }
+            currentValue = balance.get(borrower).equals(null) ? 0 : balance.get(borrower);
+            newValue = currentValue - value;
+            balance.put(borrower, newValue);
 
             //Calculating credits
-            if (lenderExists) {
-                Long newValue = balance.get(borrower) + value;
-                balance.put(lender, newValue);
-            } else {
-                balance.put(lender, value);
-            }
+            currentValue = balance.get(lender).equals(null) ? 0 : balance.get(lender);
+            newValue = currentValue + value;
+            balance.put(lender, newValue);
         });
 
         //remove positive balances
